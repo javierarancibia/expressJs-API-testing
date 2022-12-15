@@ -25,4 +25,19 @@ const products = [
     },
 ]
 
-module.exports = { products }
+const people = [
+    {
+        id: 1,
+        name: "Peter"
+    }, 
+    { 
+        id: 2, 
+        name: "Mike"
+    }, 
+    {
+        id: 3, 
+        name: "Susan"
+    }
+]
+
+module.exports = { products, people }
