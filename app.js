@@ -52,6 +52,11 @@ app.get('/api/v1/products', [ logger, authorize ], (req, res) => { // Here the m
     
 })
 
+
+app.get('/api/people', (req, res) => {
+    res.status(200).json([ ...people, { success: true, message: "Successful call" }])
+})
+
 // Call to get ONe single Product data
 app.get('/api/v1/products/:id', (req, res) => {
     const productID = req.params.id
@@ -97,13 +102,37 @@ app.post('/api/v1/login', (req, res) => {
     res.status(401).json({success: false, message: 'Please provide credentials' })
 })
 
-// Post method to add person to the People existing array 
-app.post('/api/postman/people', (req, res) => {
+// POST method to add person to the People existing array 
+app.post('/api/people', (req, res) => {
     const { name } = req.body
     if (!name) {
         return res.status(400).json({ success: false, message: "Please provide a name value" })
     }
     return res.status(201).json({ succes: true, data: [ ...people, { name: name }  ] })
+})
+
+// PUT mthod to update
+app.put('/api/people/:id', (req, res) => {
+    const { id } = req.params
+    const { name } = req.body
+    const chosenPersonIndex = people.findIndex(person => person.id === Number(id))
+    if (!chosenPersonIndex) {
+       return res.send(404).json({ success: false, message: `Person with id: ${id} not found` })
+    }
+    people[chosenPersonIndex].name = name
+    return res.status(200).json(people)
+})
+
+// DELETE method
+app.delete('/api/people/:id', (req, res) => {
+    const { id } = req.params
+    const person = people.find(person => person.id === Number(id))
+    if (!person) {
+        return res.status(400).json({ success: false, message: "Person not Found" })
+    }
+    
+    const filteredPeople = people.filter(person => person.id !== Number(id))
+    return res.status(200).json(filteredPeople)
 })
 
 
